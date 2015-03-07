@@ -28,6 +28,30 @@
       </header>
       <section>
         <h3>
+<a id="collections-and-sequences" class="anchor" href="#collections-and-sequences" aria-hidden="true"><span class="octicon octicon-link"></span></a>Collections and Sequences</h3>
+
+<p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 2 Jan 2015</p>
+
+<p>Clojure collections are literally a handful and clearly distinguishing between the various types is extremely important. Let's take a shot at it by studying the various properties:</p>
+
+<p>A collection is simply a bag of values. <code>coll?</code> tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections</p>
+
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> coll? [ '(<span class="pl-c1">:foo</span>) [<span class="pl-c1">:foo</span>] #{<span class="pl-c1">:foo</span>} {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} <span class="pl-c1">:foo</span> <span class="pl-c1">1</span> <span class="pl-s1"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> ])
+(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
+
+<p><code>counted?</code> validates those collections that be possibly counted. Understandably, the ones that cannot be counted are the lazy sequences which may be infinite. Interestingly, sequence functions like <code>map</code>, <code>filter</code> etc. return lazy sequences which cannot be counted.</p>
+
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> counted? [ [<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) (<span class="pl-en">map</span> identity []) ])
+(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
+
+<p><code>associative?</code> prefers those collections which are mapped in the form of <code>key:value</code> - namely, maps and vectors. In vectors, the mapping is from the element's index to itself. Sets are a trivial mapping from the element to itself and so are not considered associative. Lists and (lazy) sequences are accessed linearly and therefore, the concept of an index does not apply to them</p>
+
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> associative? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
+(<span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
+
+<hr>
+
+<h3>
 <a id="clojure-tips--tricks-1-contains" class="anchor" href="#clojure-tips--tricks-1-contains" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clojure tips &amp; tricks #1: contains?</h3>
 
 <p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 26 Dec 2014</p>
