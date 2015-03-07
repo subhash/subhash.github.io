@@ -54,12 +54,30 @@
 <div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> sequential? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
 (<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span>)</pre></div>
 
-<p>A collection is simply a bag of values. It is useful to be able to deal with the different kinds of collections from a common abstraction. Towards this, Clojure defines a "list-like" abstraction called <code>sequence</code>. This is similar to lists in that it is accessed linearly using <code>first</code> and <code>rest</code>. It is possible to create a <code>sequence</code> from any <code>collection</code> by calling <code>seq</code> on it. Such a sequence would always be sequential and non-associative.</p>
+<p>A collection is simply a bag of values. It is useful to be able to deal with the different kinds of collections from a common abstraction. Towards this, Clojure defines a "list-like" abstraction called <code>sequence</code>. This is similar to lists in that it is accessed linearly using <code>first</code> and <code>rest</code>. It is possible to create a <code>sequence</code> from any <code>collection</code> by calling <code>seq</code> on it. Such a sequence would always be sequential and non-associative. In fact, most collection APIs like <code>map</code>, <code>filter</code>, <code>take</code> etc call <code>seq</code> on the parameter before working on them. This is why all these APIs work consistently on all collections.</p>
 
 <div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> (<span class="pl-en">comp</span> sequential? seq) [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
 (<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span>)
 user=&gt; (<span class="pl-en">map</span> (<span class="pl-en">comp</span> associative? seq) [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
 (<span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
+
+<p><code>seq</code> also works on strings and other non-collections like Java arrays etc. The useful thing about <code>seq</code> is that it returns <code>nil</code> for empty collections and <code>nil</code>. Therefore, we have something like:</p>
+
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-s">let</span> [a []]
+         (<span class="pl-s">if</span> (<span class="pl-en">seq</span> a)
+           (<span class="pl-en">first</span> a)
+           <span class="pl-c1">:nothing-to-do</span>))
+:nothing-to-do</pre></div>
+
+<p>When <code>seq</code> is called on a collection, we get a specific implementation of sequence that presents a "list-view" of the collection. Since <code>list</code> is already a concrete implementation of sequence, it returns itself</p>
+
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">doseq</span> [c [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ]] (<span class="pl-en">println</span> (<span class="pl-en">class</span> c) <span class="pl-s1"><span class="pl-pds">"</span>-&gt;<span class="pl-pds">"</span></span> (<span class="pl-en">class</span> (<span class="pl-en">seq</span> c))))
+clojure.lang.PersistentVector -&gt; clojure.lang.PersistentVector$ChunkedSeq
+clojure.lang.PersistentList -&gt; clojure.lang.PersistentList
+clojure.lang.PersistentArrayMap -&gt; clojure.lang.PersistentArrayMap$Seq
+clojure.lang.PersistentHashSet -&gt; clojure.lang.APersistentMap$KeySeq
+clojure.lang.LazySeq -&gt; clojure.lang.ChunkedCons
+<span class="pl-c1">nil</span></pre></div>
 
 <hr>
 
