@@ -34,20 +34,24 @@
 
 <p>Clojure collections are literally a handful and clearly distinguishing between the various types is extremely important. Let's take a shot at it by studying the various properties:</p>
 
-<p>A collection is simply a bag of values. <code>coll?</code> tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections</p>
+<p>A collection is simply a bag of values. <strong><code>coll?</code></strong> tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections</p>
 
 <div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> coll? [ '(<span class="pl-c1">:foo</span>) [<span class="pl-c1">:foo</span>] #{<span class="pl-c1">:foo</span>} {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} <span class="pl-c1">:foo</span> <span class="pl-c1">1</span> <span class="pl-s1"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> ])
 (<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
 
-<p><strong><code>counted?</code></strong> validates those collections that be possibly counted. Understandably, the ones that cannot be counted are the lazy sequences which may be infinite. Interestingly, sequence functions like <code>map</code>, <code>filter</code> etc. return lazy sequences which cannot be counted.</p>
+<p><strong><code>counted?</code></strong> validates those collections that possibly be counted. Understandably, the ones that cannot be counted are the lazy sequences which may be infinite. Interestingly, sequence functions like <code>map</code>, <code>filter</code> etc. return lazy sequences which cannot be counted.</p>
 
 <div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> counted? [ [<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) (<span class="pl-en">map</span> identity []) ])
 (<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
 
-<p><code>associative?</code> prefers those collections which are mapped in the form of <code>key:value</code> - namely, maps and vectors. In vectors, the mapping is from the element's index to itself. Sets are a trivial mapping from the element to itself and so are not considered associative. Lists and (lazy) sequences are accessed linearly and therefore, the concept of an index does not apply to them</p>
+<p><strong><code>associative?</code></strong> prefers those collections which are mapped in the form of <code>key:value</code> - namely, maps and vectors. In vectors, the mapping is from the element's index to itself. Sets are a trivial mapping from the element to itself and so are not considered associative. Lists and (lazy) sequences are accessed linearly and therefore, the concept of an index does not apply to them</p>
 
 <div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> associative? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
 (<span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
+
+<p><strong><code>sequential?</code></strong> collections are those that can possibly be accessed in a linear order. Maps and sets don't quality because they have no defined order of access. </p>
+
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> sequential? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span>)</pre></div>
 
 <hr>
 
