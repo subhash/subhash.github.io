@@ -34,7 +34,7 @@
 
 <p>Clojure collections are literally a handful and clearly distinguishing between the various types is extremely important. Let's take a shot at it by studying the various properties:</p>
 
-<p>A collection is simply a bag of values. <strong><code>coll?</code></strong> tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections</p>
+<p><strong><code>coll?</code></strong> tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections</p>
 
 <div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> coll? [ '(<span class="pl-c1">:foo</span>) [<span class="pl-c1">:foo</span>] #{<span class="pl-c1">:foo</span>} {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} <span class="pl-c1">:foo</span> <span class="pl-c1">1</span> <span class="pl-s1"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> ])
 (<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
@@ -53,6 +53,13 @@
 
 <div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> sequential? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
 (<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span>)</pre></div>
+
+<p>A collection is simply a bag of values. It is useful to be able to deal with the different kinds of collections from a common abstraction. Towards this, Clojure defines a "list-like" abstraction called <code>sequence</code>. This is similar to lists in that it is accessed linearly using <code>first</code> and <code>rest</code>. It is possible to create a <code>sequence</code> from any <code>collection</code> by calling <code>seq</code> on it. Such a sequence would always be sequential and non-associative.</p>
+
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> (<span class="pl-en">comp</span> sequential? seq) [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
+(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span>)
+user=&gt; (<span class="pl-en">map</span> (<span class="pl-en">comp</span> associative? seq) [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
+(<span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
 
 <hr>
 
