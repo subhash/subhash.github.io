@@ -51,7 +51,8 @@
 
 <p><strong><code>sequential?</code></strong> collections are those that can possibly be accessed in a linear order. Maps and sets don't quality because they have no defined order of access. </p>
 
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> sequential? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span>)</pre></div>
+<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> sequential? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
+(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span>)</pre></div>
 
 <hr>
 
