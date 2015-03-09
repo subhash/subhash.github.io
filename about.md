@@ -4,8 +4,8 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+When I first used Lisp, it seemed magical and yet somehow misplaced in this earthly setting where eveything is not a list. "Everything is an object" seemed more convincing and so, I grew up on a strict diet of C++ classes and Java interfaces. But when Clojure came along, it seemed worth trying and by the time ClojureScript and Datomic were released, the world of functional programming seemed to beckon.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+I think I have read enough ramblings and rants that I think it's time I start giving back
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+Hence the disclojures ..
