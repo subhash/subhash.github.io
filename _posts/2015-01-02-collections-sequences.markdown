@@ -7,14 +7,13 @@ categories: clojure.core
 
 Clojure collections are literally a handful and distinguishing between the various types is tricky. Let's take a shot at it by studying the various collection functions:
 
-`coll?` tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections
-
-```clojure
+**`coll?`** tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections
+{% highlight clojure %}
 user=> (map coll? [ '(:foo) [:foo] #{:foo} {:foo 1} :foo 1 "foo" ])
 (true true true true false false false)
-```
+{% endhighlight %}
 
-`counted?` validates those collections that possibly be counted. Understandably, the ones that cannot be counted are the lazy sequences which may be infinite. Interestingly, sequence functions like `map`, `filter` etc. return lazy sequences which cannot be counted.
+**`counted?`** validates those collections that possibly be counted. Understandably, the ones that cannot be counted are the lazy sequences which may be infinite. Interestingly, sequence functions like `map`, `filter` etc. return lazy sequences which cannot be counted.
 
 {% highlight clojure %}
 user=> (map counted? [ [:foo] '(:foo) {:foo 1} #{:foo} (range) (map identity []) ])
