@@ -31,7 +31,7 @@ user=> (map associative? [[:foo] '(:foo) {:foo 1} #{:foo} (range) ])
 {% highlight clojure %}
 user=> (map sequential? [[:foo] '(:foo) {:foo 1} #{:foo} (range) ])
 (true true false false true)
-```
+{% endhighlight %}
 
 A collection is simply a bag of values. It is useful to be able to deal with the different kinds of collections from a common abstraction. Towards this, Clojure defines a "list-like" abstraction called `sequence`. This is similar to lists in that it is accessed linearly using `first` and `rest`. It is possible to create a `sequence` from any `collection` by calling `seq` on it. Such a sequence would always be sequential and non-associative. In fact, most collection APIs like `map`, `filter`, `take` etc call `seq` on the parameter before working on them. This is why all these APIs work consistently on all collections.
 {% highlight clojure %}
