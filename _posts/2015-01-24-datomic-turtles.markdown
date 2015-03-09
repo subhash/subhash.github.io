@@ -61,3 +61,6 @@ user=> (map #(-> (db conn) (d/entity %) (:db/ident)) (take 40 (range)))
 {% endhighlight %}
 
 It is interesting to see how Datomic's meta-system, at the very bottom, consists only of entities or facts. These basic entities are used to create a type system and instrument attribute definitions. Later, the user refers to the type entities to define attributes, which are themselves entities. 
+
+
+P.S. If you liked this, you may also like the extended version [here](https://github.com/subhash/clj-stack/wiki/Datomic-from-the-ground-up)
