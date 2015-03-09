@@ -11,3 +11,4 @@ github_username:  subhashgo
 
 # Build settings
 markdown: kramdown
+  input: GFM
