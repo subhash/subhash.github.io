@@ -6,9 +6,9 @@ categories: clojure.core
 ---
 
 You want to check if a set contains a certain element? Easy peasy ...
-{% highlight ruby %}
+{% highlight clojure %}
 user=> (contains? #{:foo :bar} :foo)
-true
+false
 {% endhighlight %}
 
 How about a map?
