@@ -1,217 +1,23 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Disclojures by subhash</title>
+---
+layout: default
+---
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Disclojures</h1>
-        <p class="header"></p>
+<div class="home">
 
+  <h1 class="page-heading">Posts</h1>
 
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
-        <ul>
-          <li><a class="buttons github" href="https://github.com/subhash">GitHub Profile</a></li>
-        </ul>
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
 
-      </header>
-      <section>
-        <h3>
-<a id="clojure-everywhere-om-pedestal-and-datomic" class="anchor" href="#clojure-everywhere-om-pedestal-and-datomic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clojure Everywhere: Om, Pedestal and Datomic</h3>
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
-<p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 9 Feb 2015</p>
-
-<p>It is not everyday when you encounter a programming language which can be used all over the stack - in the client, server and DB. This fact fascinates me to no end and <a href="https://github.com/subhash/clj-stack">Clojure Everywhere</a> is a result of that fascination. It is a tutorial-slash-sample-project that guides a newbie to the world of possibilities in Clojure (hopefully <img class="emoji" title=":smile:" alt=":smile:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f604.png" height="20" width="20" align="absmiddle">). Enjoy!</p>
-
-<h3>
-<a id="datomic-it-turtles-all-the-way-down" class="anchor" href="#datomic-it-turtles-all-the-way-down" aria-hidden="true"><span class="octicon octicon-link"></span></a>Datomic: It turtles all the way down!</h3>
-
-<p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 24 Jan 2015</p>
-
-<p>We know that the way to create an attribute is Datomic is by running a transaction with a map like this:</p>
-
-<div class="highlight highlight-clojure"><pre>{<span class="pl-c1">:db/id</span> #db/id[<span class="pl-c1">:db.part/db</span>]
- <span class="pl-c1">:db/ident</span> <span class="pl-c1">:community/name</span>
- <span class="pl-c1">:db/valueType</span> <span class="pl-c1">:db.type/string</span>
- <span class="pl-c1">:db/cardinality</span> <span class="pl-c1">:db.cardinality/one</span>
- <span class="pl-c1">:db/fulltext</span> <span class="pl-c1">true</span>
- <span class="pl-c1">:db/doc</span> <span class="pl-s1"><span class="pl-pds">"</span>A community's name<span class="pl-pds">"</span></span>
- <span class="pl-c1">:db.install/_attribute</span> <span class="pl-c1">:db.part/db</span>}</pre></div>
-
-<p>We also know that the <code>:db.install/_attribute</code> is a back-reference to the <code>:db.part/db</code> entity which is responsible for keeping track of all the attributes in the system. Does that mean one can easily query all the attributes in the system?</p>
-
-<div class="highlight highlight-clojure"><pre><span class="pl-c">; datomic REPL</span>
-user=&gt; (<span class="pl-k">use</span> '[datomic.api <span class="pl-c1">:only</span> [q db] <span class="pl-c1">:as</span> d])
-user=&gt; (<span class="pl-k">def</span> <span class="pl-e">uri</span> <span class="pl-s1"><span class="pl-pds">"</span>datomic:mem://disclojures<span class="pl-pds">"</span></span>)
-user=&gt; (<span class="pl-en">d/create-database</span> uri)
-user=&gt; (<span class="pl-k">def</span> <span class="pl-e">conn</span> (<span class="pl-en">d/connect</span> uri))
-user=&gt; (<span class="pl-en">q</span> '[<span class="pl-c1">:find</span> [?n ...] <span class="pl-c1">:where</span> [<span class="pl-c1">:db.part/db</span> <span class="pl-c1">:db.install/attribute</span> ?a] [?a <span class="pl-c1">:db/ident</span> ?n]] (<span class="pl-en">db</span> conn))
-[<span class="pl-c1">:db/code</span> <span class="pl-c1">:fressian/tag</span> <span class="pl-c1">:db/index</span> <span class="pl-c1">:db/doc</span> <span class="pl-c1">:db/lang</span> <span class="pl-c1">:db.excise/before</span> <span class="pl-c1">:db/fn</span> <span class="pl-c1">:db.install/function</span> <span class="pl-c1">:db.excise/beforeT</span> <span class="pl-c1">:db/excise</span> <span class="pl-c1">:db/cardinality</span> <span class="pl-c1">:db.install/valueType</span> <span class="pl-c1">:db.install/partition</span> <span class="pl-c1">:db/txInstant</span> <span class="pl-c1">:db/valueType</span> <span class="pl-c1">:db.excise/attrs</span> <span class="pl-c1">:db/unique</span> <span class="pl-c1">:db.alter/attribute</span> <span class="pl-c1">:db/ident</span> <span class="pl-c1">:db/noHistory</span> <span class="pl-c1">:db.install/attribute</span> <span class="pl-c1">:db/isComponent</span> <span class="pl-c1">:db/fulltext</span>]</pre></div>
-
-<p>Yes, that's right! All the system attributes (plus any others you may have defined) are modeled as values of the attribute <code>:db.install/attribute</code> of the entity <code>:db.part/db</code>. Now, that would mean that <code>:db.install/attribute</code> would be defined someplace, right? </p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">q</span> '[<span class="pl-c1">:find</span> (<span class="pl-en">pull</span> ?a [*]) <span class="pl-c1">:where</span> [?a <span class="pl-c1">:db/ident</span> <span class="pl-c1">:db.install/attribute</span>]] (<span class="pl-en">db</span> conn))
-[[{<span class="pl-c1">:db/id</span> <span class="pl-c1">13</span>, <span class="pl-c1">:db/ident</span> :db.install/attribute, <span class="pl-c1">:db/valueType</span> {<span class="pl-c1">:db/id</span> <span class="pl-c1">20</span>}, <span class="pl-c1">:db/cardinality</span> {<span class="pl-c1">:db/id</span> <span class="pl-c1">36</span>}, <span class="pl-c1">:db/doc</span> <span class="pl-s1"><span class="pl-pds">"</span>System attribute with type :db.type/ref. Asserting this attribute on :db.part/db with value v will install v as an attribute.<span class="pl-pds">"</span></span>}]]</pre></div>
-
-<p>It is indeed an attribute, but the type and cardinality information is hiding behind opaque ids. No worries, entity API to the rescue!</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">-&gt;</span> (<span class="pl-en">db</span> conn) (<span class="pl-en">d/entity</span> <span class="pl-c1">36</span>) (<span class="pl-c1">:db/ident</span>))
-:db.cardinality/many
-user=&gt; (<span class="pl-en">-&gt;</span> (<span class="pl-en">db</span> conn) (<span class="pl-en">d/entity</span> <span class="pl-c1">20</span>) (<span class="pl-c1">:db/ident</span>))
-:db.type/ref</pre></div>
-
-<p>That makes sense. <code>:db.install/attribute</code> is a <code>ref</code> because it "points" to other attribute definitions and it's cardinality is <code>many</code> obviously because there are "many" attributes. Now, what about <code>:db.type/ref</code>?</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt;  (<span class="pl-en">q</span> '[<span class="pl-c1">:find</span> (<span class="pl-en">pull</span> ?a [*]) <span class="pl-c1">:where</span> [?a <span class="pl-c1">:db/ident</span> <span class="pl-c1">:db.type/ref</span> ]] (<span class="pl-en">db</span> conn))
-[[{<span class="pl-c1">:db/id</span> <span class="pl-c1">20</span>, <span class="pl-c1">:db/ident</span> :db.type/ref, <span class="pl-c1">:fressian/tag</span> :ref, <span class="pl-c1">:db/doc</span> <span class="pl-s1"><span class="pl-pds">"</span>Value type for references. All references from one entity to another are through attributes with this value type.<span class="pl-pds">"</span></span>}]]</pre></div>
-
-<p>It turns out that <code>:db.type/ref</code> is one of many basic "built-in" entities from which other definitions are based on. Here are some basic attributes in Datomic:</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> #(<span class="pl-en">-&gt;</span> (<span class="pl-en">db</span> conn) (<span class="pl-en">d/entity</span> %) (<span class="pl-c1">:db/ident</span>)) (<span class="pl-en">take</span> <span class="pl-c1">40</span> (<span class="pl-en">range</span>)))
-(<span class="pl-c1">:db.part/db</span> <span class="pl-c1">:db/add</span> <span class="pl-c1">:db/retract</span> <span class="pl-c1">:db.part/tx</span> <span class="pl-c1">:db.part/user</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">:db/ident</span> <span class="pl-c1">:db.install/partition</span> <span class="pl-c1">:db.install/valueType</span> <span class="pl-c1">:db.install/attribute</span> <span class="pl-c1">:db.install/function</span> <span class="pl-c1">:db/excise</span> <span class="pl-c1">:db.excise/attrs</span> <span class="pl-c1">:db.excise/beforeT</span> <span class="pl-c1">:db.excise/before</span> <span class="pl-c1">:db.alter/attribute</span> <span class="pl-c1">:db.type/ref</span> <span class="pl-c1">:db.type/keyword</span> <span class="pl-c1">:db.type/long</span> <span class="pl-c1">:db.type/string</span> <span class="pl-c1">:db.type/boolean</span> <span class="pl-c1">:db.type/instant</span> <span class="pl-c1">:db.type/fn</span> <span class="pl-c1">:db.type/bytes</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">nil</span> <span class="pl-c1">:db.cardinality/one</span> <span class="pl-c1">:db.cardinality/many</span> <span class="pl-c1">:db.unique/value</span> <span class="pl-c1">:db.unique/identity</span> <span class="pl-c1">:fressian/tag</span>)</pre></div>
-
-<p>It is interesting to see how Datomic's meta-system, at the very bottom, consists only of entities or facts. These basic entities are used to create a type system and instrument attribute definitions. Later, the user refers to the type entities to define attributes, which are themselves entities. </p>
-
-<hr>
-
-<hr>
-
-<hr>
-
-<hr>
-
-<h3>
-<a id="4clojurecom-ftw" class="anchor" href="#4clojurecom-ftw" aria-hidden="true"><span class="octicon octicon-link"></span></a>4clojure.com FTW!</h3>
-
-<p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 12 Jan 2015</p>
-
-<p>This is a great resource for someone starting with Clojure. The site presents problems (of varying difficulty) and provides test cases to check for all sorts of edge-cases (and algorithmic complexity too!). The code golf feature challenges you to arrive at the shortest possible solution. Though some may be inspired to take it down the <a href="http://en.wikipedia.org/wiki/Brainfuck">Brainf**k</a> route, this can also help you find the most idiomatic way to express yourself in Clojure. May the force be with you!</p>
-
-<p><a href="https://www.4clojure.com/user/subhashgo">Yours truly</a> is on rank 328 (and climbing). I have also published some of my solutions <a href="https://github.com/subhash/4clojure">here</a>. </p>
-
-<h3>
-<a id="collections-and-sequences" class="anchor" href="#collections-and-sequences" aria-hidden="true"><span class="octicon octicon-link"></span></a>Collections and Sequences</h3>
-
-<p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 2 Jan 2015</p>
-
-<p>Clojure collections are literally a handful and distinguishing between the various types is tricky. Let's take a shot at it by studying the various collection functions:</p>
-
-<p><strong><code>coll?</code></strong> tells us which ones are valid collections. Expectedly, scalars like numbers and keywords are not collections. Strings are also not collections, but they can be easily converted to become collections</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> coll? [ '(<span class="pl-c1">:foo</span>) [<span class="pl-c1">:foo</span>] #{<span class="pl-c1">:foo</span>} {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} <span class="pl-c1">:foo</span> <span class="pl-c1">1</span> <span class="pl-s1"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span> ])
-(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
-
-<p><strong><code>counted?</code></strong> validates those collections that possibly be counted. Understandably, the ones that cannot be counted are the lazy sequences which may be infinite. Interestingly, sequence functions like <code>map</code>, <code>filter</code> etc. return lazy sequences which cannot be counted.</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> counted? [ [<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) (<span class="pl-en">map</span> identity []) ])
-(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
-
-<p><strong><code>associative?</code></strong> prefers those collections which are mapped in the form of <code>key:value</code> - namely, maps and vectors. In vectors, the mapping is from the element's index to itself. Sets are a trivial mapping from the element to itself and so are not considered associative. Lists and (lazy) sequences are accessed linearly and therefore, the concept of an index does not apply to them</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> associative? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
-(<span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
-
-<p><strong><code>sequential?</code></strong> collections are those that can possibly be accessed in a linear order. Maps and sets don't quality because they have no defined order of access. </p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> sequential? [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
-(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">true</span>)</pre></div>
-
-<p>A collection is simply a bag of values. It is useful to be able to deal with the different kinds of collections from a common abstraction. Towards this, Clojure defines a "list-like" abstraction called <code>sequence</code>. This is similar to lists in that it is accessed linearly using <code>first</code> and <code>rest</code>. It is possible to create a <code>sequence</code> from any <code>collection</code> by calling <code>seq</code> on it. Such a sequence would always be sequential and non-associative. In fact, most collection APIs like <code>map</code>, <code>filter</code>, <code>take</code> etc call <code>seq</code> on the parameter before working on them. This is why all these APIs work consistently on all collections.</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">map</span> (<span class="pl-en">comp</span> sequential? seq) [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
-(<span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span> <span class="pl-c1">true</span>)
-user=&gt; (<span class="pl-en">map</span> (<span class="pl-en">comp</span> associative? seq) [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ])
-(<span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span> <span class="pl-c1">false</span>)</pre></div>
-
-<p><code>seq</code> also works on strings and other non-collections like Java arrays etc. The useful thing about <code>seq</code> is that it returns <code>nil</code> for empty collections and <code>nil</code>. Therefore, we have something like:</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-s">let</span> [a []]
-         (<span class="pl-s">if</span> (<span class="pl-en">seq</span> a)
-           (<span class="pl-en">first</span> a)
-           <span class="pl-c1">:nothing-to-do</span>))
-:nothing-to-do</pre></div>
-
-<p>When <code>seq</code> is called on a collection, we get a specific implementation of sequence that presents a "list-view" of the collection. Since <code>list</code> is already a concrete implementation of sequence, it returns itself</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">doseq</span> [c [[<span class="pl-c1">:foo</span>] '(<span class="pl-c1">:foo</span>) {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span>} #{<span class="pl-c1">:foo</span>} (<span class="pl-en">range</span>) ]] (<span class="pl-en">println</span> (<span class="pl-en">class</span> c) <span class="pl-s1"><span class="pl-pds">"</span>-&gt;<span class="pl-pds">"</span></span> (<span class="pl-en">class</span> (<span class="pl-en">seq</span> c))))
-clojure.lang.PersistentVector -&gt; clojure.lang.PersistentVector$ChunkedSeq
-clojure.lang.PersistentList -&gt; clojure.lang.PersistentList
-clojure.lang.PersistentArrayMap -&gt; clojure.lang.PersistentArrayMap$Seq
-clojure.lang.PersistentHashSet -&gt; clojure.lang.APersistentMap$KeySeq
-clojure.lang.LazySeq -&gt; clojure.lang.ChunkedCons
-<span class="pl-c1">nil</span></pre></div>
-
-<hr>
-
-<h3>
-<a id="clojure-tips--tricks-1-contains" class="anchor" href="#clojure-tips--tricks-1-contains" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clojure tips &amp; tricks #1: contains?</h3>
-
-<p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 26 Dec 2014</p>
-
-<p>You want to check if a set contains a certain element? Easy peasy ...</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">contains?</span> #{<span class="pl-c1">:foo</span> <span class="pl-c1">:bar</span>} <span class="pl-c1">:foo</span>)
-<span class="pl-c1">true</span></pre></div>
-
-<p>How about a map?</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">contains?</span> {<span class="pl-c1">:foo</span> <span class="pl-c1">1</span> <span class="pl-c1">:bar</span> <span class="pl-c1">2</span>} <span class="pl-c1">:foo</span>)
-<span class="pl-c1">true</span></pre></div>
-
-<p>Should work for vectors too, right?</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">contains?</span> [<span class="pl-c1">:foo</span> <span class="pl-c1">:bar</span>] <span class="pl-c1">:foo</span>)
-<span class="pl-c1">false</span></pre></div>
-
-<p>Nope. That does not work because <code>contains?</code> checks for the presence of keys, not values. And when you think about it, the keys for a vector are its indices. This is because a vector is strictly ordered and the key <code>1</code> should correspond to the second element, if any.</p>
-
-<div class="highlight highlight-clojure"><pre>(<span class="pl-en">contains?</span> [<span class="pl-c1">:foo</span> <span class="pl-c1">:bar</span>] <span class="pl-c1">1</span>)
-<span class="pl-c1">true</span></pre></div>
-
-<p>This allows the <code>contains?</code> function to perform in constant or logarithmic time by searching only within the key indices.</p>
-
-<p>Clojure provides a different function to check for values in a collection.</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">some</span> #(<span class="pl-en">=</span> % <span class="pl-c1">:foo</span>) [<span class="pl-c1">:foo</span> <span class="pl-c1">:bar</span>])
-<span class="pl-c1">true</span></pre></div>
-
-<p>Or even better:</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">some</span> #{<span class="pl-c1">:foo</span>} [<span class="pl-c1">:foo</span> <span class="pl-c1">:bar</span>])  <span class="pl-c">; a set acts as a predicate </span>
-:foo <span class="pl-c">; a truthy value</span></pre></div>
-
-<p>That might give you yet another idea</p>
-
-<div class="highlight highlight-clojure"><pre>user=&gt; (<span class="pl-en">(set</span> [<span class="pl-c1">:foo</span> <span class="pl-c1">:bar</span>]) <span class="pl-c1">:foo</span>)
-:foo
-user=&gt; (<span class="pl-en">(set</span> [<span class="pl-c1">:foo</span> <span class="pl-c1">:bar</span>]) <span class="pl-c1">:doo</span>)
-<span class="pl-c1">nil</span></pre></div>
-
-<hr>
-
-<h3>
-<a id="hello-world" class="anchor" href="#hello-world" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hello World!</h3>
-
-<p><img class="emoji" title=":date:" alt=":date:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4c5.png" height="20" width="20" align="absmiddle"> 21 Dec 2014</p>
-
-<p>I have always had a crush on Clojure and now, I finally summoned the courage to ask her out on a date. You'll have to wait to see how the saga ends ..</p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
-      </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
-  </body>
-</html>
+</div>
