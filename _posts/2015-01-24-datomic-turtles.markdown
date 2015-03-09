@@ -31,7 +31,7 @@ user=> (q '[:find [?n ...] :where [:db.part/db :db.install/attribute ?a] [?a :db
 
 Yes, that's right! All the system attributes (plus any others you may have defined) are modeled as values of the attribute `:db.install/attribute` of the entity `:db.part/db`. Now, that would mean that `:db.install/attribute` would be defined someplace, right? 
 
-```clojure
+{% highlight clojure %}
 user=> (q '[:find (pull ?a [*]) :where [?a :db/ident :db.install/attribute]] (db conn))
 [[{:db/id 13, :db/ident :db.install/attribute, :db/valueType {:db/id 20}, :db/cardinality {:db/id 36}, :db/doc "System attribute with type :db.type/ref. Asserting this attribute on :db.part/db with value v will install v as an attribute."}]]
 {% endhighlight %}
