@@ -59,6 +59,20 @@ user=> (type (read-string "(defn foo [] (println \"foo\"))"))
 clojure.lang.PersistentList
 {% endhighlight %}
 
+When the reader encounters certain special characters like `' (quote)` or `; (comment)` or `^ (meta)`, the usual reader behaviour is altered. For eg, for `;`, the reader reads and ignores every character until the end of the line. The `#` character is special because the reader behaviour for handling this is determined by the following character. Apart from the usual suspects - sets `#{}` and anonymous functions `#()`, you can find other tag symbols mapped to data readers by calling `clojure.core/default-data-readers`. It returns a map of tag against the corresponding reader function that'll be invoked when the tag is encountered:
+
+{% highlight clojure %}
+user=> clojure.core/default-data-readers
+{inst #'clojure.instant/read-instant-date, uuid #'clojure.uuid/default-uuid-reader}
+user=> (.getTime #inst "2015-05-12T12:12:05.496-00:00")
+1431432725496
+user=> (.getTime (clojure.instant/read-instant-date "2015-05-12T12:12:05.496-00:00"))
+1431432725496
+{% endhighlight %}
+
+
+
+
 
 
 
