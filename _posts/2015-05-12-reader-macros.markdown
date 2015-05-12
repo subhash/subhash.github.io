@@ -70,6 +70,39 @@ user=> (.getTime (clojure.instant/read-instant-date "2015-05-12T12:12:05.496-00:
 1431432725496
 {% endhighlight %}
 
+Users can provide custom reader functions against tags of their choice. When a mapping of tag to function is specified in a file named `data_readers.clj` in the root of the classpath, it is incorporated within a dynamic variable called [*data-readers*](http://clojure.github.io/clojure/branch-master/clojure.core-api.html#clojure.core/*data-readers*) and used whenever the reader encounters a matching tag. Unzipping `datomic-pro-0.9.5130.jar` does indeed throw up a `data_readers.clj` whose content is:
+
+{% highlight clojure %}
+{db/id datomic.db/id-literal
+ db/fn datomic.function/construct
+ base64 datomic.codec/base-64-literal}
+{% endhighlight %}
+
+The function `datomic.db/id-literal` seems interesting. Let's play with it:
+
+{% highlight clojure %}
+user=> (def id (datomic.db/id-literal [:db.part/user]))
+#'user/id
+user=> (associative? id)
+true
+user=> (keys id)
+(:part :idx)
+user=> (vals id)
+(:db.part/user -1006784)
+{% endhighlight %}
+
+So, now we know that each time the reader hits upon `#db/id`, it calls a function which returns a map-like structure to stand in as the id of the entity. The original problem should be clear now. Only when the reader __encounters__ the `#db/id` literal can it substitute it with the id object. And in our code, it encounters it only once and substitutes it with a single value which is used for all entities. Clearly not what we intended. And, therefore ..
+
+{% highlight clojure %}
+  {:track-point/latitude (xml1-> z (attr :lat) #(Float/valueOf %))
+  :track-point/longitude (xml1-> z (attr :lon) #(Float/valueOf %))
+  :track-point/altitude (xml1-> z :extensions (keyword "gpxdata:altitude") text #(Float/valueOf %))
+  :track-point/heart-rate (xml1-> z :extensions (keyword "gpxtpx:TrackPointExtension") (keyword "gpxtpx:hr") text #(Integer/valueOf %))
+  :track-point/speed (xml1-> z :extensions (keyword "gpxdata:speed") text #(Float/valueOf %))
+  :track-point/vertical-speed (xml1-> z :extensions (keyword "gpxdata:verticalSpeed") text #(Float/valueOf %))
+  :track-point/time (xml1-> z :time text #(clojure.instant/read-instant-date %))
+  :db/id (d/tempid :db.part/user)}
+{% endhighlight %}
 
 
 
