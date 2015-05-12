@@ -28,3 +28,25 @@ IllegalArgumentExceptionInfo :db.error/datoms-conflict Two datoms in the same tr
  [17592186052196 :track-point/latitude 43.730198 13194139541089 true]}
   datomic.error/argd (error.clj:77)
 {% endhighlight %}
+
+This was a classic case of the "mental shortcut" problem - I was using `#db/id` as if it were a function generating ids just because it __behaved__ like one when used in edn files like this:
+
+{% highlight clojure %}
+ {:db/id #db/id[:db.part/db]
+  :db/ident :track/name
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id[:db.part/db]
+  :db/ident :track/track-points
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db.install/_attribute :db.part/db}
+{% endhighlight %}
+
+But of course, `#db/id` is not a function. It is a reader macro whose behaviour is drastically different when used in code. 
+
+
+
+
+
