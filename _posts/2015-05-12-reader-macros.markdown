@@ -44,7 +44,21 @@ This was a classic case of the "mental shortcut" problem - I was using `#db/id` 
   :db.install/_attribute :db.part/db}
 {% endhighlight %}
 
-But of course, `#db/id` is not a function. It is a reader macro whose behaviour is drastically different when used in code. 
+But of course, `#db/id` is not a function. It is a reader macro whose behaviour is drastically different when used in code. To understand why we tripped on this reader macro, we'll have to start by understanding the reader.
+
+As we all know (by now :)), the Clojure compiler works on forms and not syntax trees. It is the task of the reader to parse character streams to forms that can be compiled. This can be easily demonstrated using `read-string`
+
+{% highlight clojure %}
+user=> (type (read-string "1"))
+java.lang.Long
+user=> (type (read-string "\"foo\""))
+java.lang.String
+user=> (type (read-string "foo"))
+clojure.lang.Symbol
+user=> (type (read-string "(defn foo [] (println \"foo\"))"))
+clojure.lang.PersistentList
+{% endhighlight %}
+
 
 
 
