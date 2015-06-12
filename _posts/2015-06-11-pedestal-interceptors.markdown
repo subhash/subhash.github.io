@@ -12,8 +12,8 @@ In Pedestal, *handlers* are functions that accept a request in the form of a map
 So, in Stuart Hinson's [blog post](https://stuarth.github.io/clojure/pedestal-browser-repl/), he describes an idea that allows him to respond with a browser REPL for certain requests and not others. Normally, this would be handled using an interceptor, but he does not want to tie this special behaviour based on the route hierarchy. He goes on to add this extra detail in the handler's metadata and includes an interceptor which looks into the queue for this metadata in other interceptors (and handlers). Once found, special action is taken - in this case, a browser REPL is injected into the response.
 
 I was curious about exploring the idea with two questions:
-* Since the handler is also an `Interceptor` object, could we "add on" to the handler instead of using `meta`?
-* Could we generalize this interception so that we could wrap handlers with ad-hoc functionality during route definition?
+*   Since the handler is also an `Interceptor` object, could we "add on" to the handler instead of using `meta`?
+*   Could we generalize this interception so that we could wrap handlers with ad-hoc functionality during route definition?
 
 I started by writing a simple route and its corresponding handler:
 
