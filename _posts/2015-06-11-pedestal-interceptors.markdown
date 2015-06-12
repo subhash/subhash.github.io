@@ -68,4 +68,4 @@ This approach is flexible in that, we can add other "wrappers" and use them with
     (fn [c] (update-in c [:response :body] #(str % "<script>alert('Wrapped!');</script>")))))
 {% endhighlight %}
 
-It's interesting to see how adaptable data-centric code can be. You can find the full code [here]()
+It's interesting to see how adaptable data-centric code can be. You can find the full code [here](https://github.com/subhash/scratch/tree/master/pedestal-interceptors)
