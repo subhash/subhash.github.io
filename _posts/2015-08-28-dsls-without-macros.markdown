@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Building DSLs when you don't have macros"
-date:   2015-06-11
+date:   2015-08-28
 categories: scala 
 ---
 
